@@ -1,9 +1,11 @@
 package pl.com.sages.hr.model;
 
+import pl.com.sages.hr.command.Visitable;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Department {
+public class Department implements Visitable{
 	private String name;
 	private Set<Director> directors = new HashSet<Director>();
 	
@@ -31,5 +33,13 @@ public class Department {
 			directorNames.append(director.toString());
 		}
 		return "[Department | name=" + name + ", directors=" + directorNames.toString() + "]";
+	}
+
+	@Override
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
+		for(Director director : directors) {
+			director.accept(visitor);
+		}
 	}
 }

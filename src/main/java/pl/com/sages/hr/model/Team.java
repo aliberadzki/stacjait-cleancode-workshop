@@ -1,8 +1,10 @@
 package pl.com.sages.hr.model;
 
+import pl.com.sages.hr.command.Visitable;
+
 import java.math.BigDecimal;
 
-public class Team {
+public class Team implements Visitable{
 	private String name;
 	
 	private int sinceYear;
@@ -67,5 +69,10 @@ public class Team {
 	{
 		return "[Team | name: " + name + ", type: " + teamType + ", since year: " + sinceYear + ", member count: " + memberCount + 
 				", kpi: " + kpi + ", directors coefficient: " + directorsCoefficient + "]";
+	}
+
+	@Override
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
 	}
 }

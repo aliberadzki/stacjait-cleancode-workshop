@@ -6,13 +6,7 @@ import java.util.Set;
 
 import pl.com.sages.hr.bonus.BonusCalculator;
 import pl.com.sages.hr.bonus.BonusCalculatorResolver;
-import pl.com.sages.hr.command.AddDepartmentCommand;
-import pl.com.sages.hr.command.BonusCommand;
-import pl.com.sages.hr.command.Command;
-import pl.com.sages.hr.command.CommandResolver;
-import pl.com.sages.hr.command.HelpCommand;
-import pl.com.sages.hr.command.InfoCommand;
-import pl.com.sages.hr.command.PrintCommand;
+import pl.com.sages.hr.command.*;
 import pl.com.sages.hr.model.Department;
 import pl.com.sages.hr.model.Director;
 import pl.com.sages.hr.model.Team;
@@ -42,6 +36,7 @@ public class HRSystem {
 		commandResolver.registerCommand(new InfoCommand());
 		commandResolver.registerCommand(new PrintCommand(core));
 		commandResolver.registerCommand(new HelpCommand());
+		commandResolver.registerCommand(new StatCommand(core));
 	}
 	
 	public void start(String[] args)
