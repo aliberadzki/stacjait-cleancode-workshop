@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import pl.com.sages.hr.model.Team;
 
-public abstract class BonusCalculator 
+public class BonusCalculator 
 {
 	private static final BigDecimal BONUS_BASE = new BigDecimal(1000);
 	
@@ -20,10 +20,10 @@ public abstract class BonusCalculator
 				).add(directorsCoefficient);
 	}
 	
-	protected abstract BigDecimal computeTeamCoefficient(Team team);
-//	{
-//		return BigDecimal.ONE;
-//	}
+	protected BigDecimal computeTeamCoefficient(Team team)
+	{
+		return BigDecimal.ONE;
+	}
 	
 	protected int getCurrentYear()
 	{

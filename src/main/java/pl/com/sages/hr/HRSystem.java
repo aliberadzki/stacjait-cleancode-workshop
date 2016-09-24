@@ -6,71 +6,65 @@ import java.util.Set;
 
 import pl.com.sages.hr.bonus.BonusCalculator;
 import pl.com.sages.hr.bonus.BonusCalculatorResolver;
+import pl.com.sages.hr.command.AddDepartmentCommand;
+import pl.com.sages.hr.command.BonusCommand;
+import pl.com.sages.hr.command.Command;
+import pl.com.sages.hr.command.CommandResolver;
+import pl.com.sages.hr.command.HelpCommand;
+import pl.com.sages.hr.command.InfoCommand;
+import pl.com.sages.hr.command.PrintCommand;
 import pl.com.sages.hr.model.Department;
 import pl.com.sages.hr.model.Director;
 import pl.com.sages.hr.model.Team;
 import pl.com.sages.hr.model.TeamType;
-import pl.com.sages.hr.operations.*;
 
 public class HRSystem {
 	
-	private ApplicationCore core = new ApplicationCore();
+	private ApplicationCore core;
+	private CommandResolver commandResolver;
 	
 	public static void main(String[] args)
 	{
-		HRSystem hrSystem = new HRSystem();
-		hrSystem.start();
+		HRSystem hrSystem = new HRSystem(new ApplicationCore(), new CommandResolver());
+		hrSystem.start(args);
 	}
 	
-	public void start()
+	public HRSystem(ApplicationCore core, CommandResolver commandResolver)
 	{
+		this.core = core;
+		this.commandResolver = commandResolver;
+	}
+	
+	private void init()
+	{
+		commandResolver.registerCommand(new AddDepartmentCommand(core));
+		commandResolver.registerCommand(new BonusCommand(core));
+		commandResolver.registerCommand(new InfoCommand());
+		commandResolver.registerCommand(new PrintCommand(core));
+		commandResolver.registerCommand(new HelpCommand());
+	}
+	
+	public void start(String[] args)
+	{
+		init();
+		
 		System.out.println("--- Human Resources System ---");
 		Scanner scanner = new Scanner(System.in);
-
-		OperationFactory operationFactory = new OperationFactoryImpl(scanner, core);
+		
 		while(true)
 		{
 			System.out.println("hrs# ");
-			String cmd = scanner.nextLine();
-
-			if(cmd.equals("exit"))
+			String line = scanner.nextLine();
+			String[] arguments = line.split(" ");
+			String cmd = arguments[0];
+			
+			if("exit".equals(cmd))
 			{
 				break;
 			}
-
-			if(!operationFactory.exists(cmd)) {
-				operationFactory.helpOperation().execute();
-			}
-
-			operationFactory.get(cmd).execute();
-
-			if(cmd.equals("info"))
-			{
-				Operation infoOperation = new InfoOperation();
-				infoOperation.execute();
-			}
-			else if(cmd.equals("add_department"))
-			{
-				Operation addDeptOperation = new AddDepartmentOperation(scanner, core);
-				addDeptOperation.execute();
-
-
-			}
-			else if(cmd.equals("bonus"))
-			{
-				Operation displayBonusesOperation = new DisplayBonusesOperation(core);
-				displayBonusesOperation.execute();
-
-			}
-			else if(cmd.equals("print"))
-			{
-				Operation printOrganization = new PrintOrganizationOperation(core);
-				printOrganization.execute();
-			}
-			else if(cmd.equals("exit"))
-			{
-				break;
-			}
+			
+			Command command = commandResolver.resolve(cmd);
+			command.doAction(arguments);
 		}
 	}
 }

@@ -1,14 +1,12 @@
 package pl.com.sages.hr.bonus;
 
 import pl.com.sages.hr.model.Team;
-import pl.com.sages.hr.model.TeamType;
 
 public class BonusCalculatorResolver {
 	
 	public static BonusCalculator resolve(Team team)
 	{
-		TeamType teamType = team.getTeamType();
-		switch(teamType)
+		switch(team.getTeamType())
 		{
 		case QA:
 			return new QABonusCalculator();
@@ -19,7 +17,7 @@ public class BonusCalculatorResolver {
 		case OPS:
 			return new OPSBonusCalculator();
 		default:
-			throw new IllegalArgumentException("Unsupported team type: " + typeType);
+			return new BonusCalculator();
 		}
 	}
 }
