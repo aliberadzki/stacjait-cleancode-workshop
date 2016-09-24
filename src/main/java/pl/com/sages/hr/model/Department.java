@@ -1,32 +1,35 @@
 package pl.com.sages.hr.model;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class Department {
 	private String name;
 	private Set<Director> directors = new HashSet<Director>();
-
-	public Department(String name) {
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
 		this.name = name;
 	}
-
-	public void addDirector(Director directorToBeAdded) {
-		this.directors.add(directorToBeAdded);
+	
+	public Set<Director> getDirectors() {
+		return directors;
 	}
-
-	public String toString() {
-		Iterator i = directors.iterator();
-
-		StringBuilder builder = new StringBuilder("[Department | name=")
-				.append(this.name)
-				.append(", directors =");
-
-		while(i.hasNext()) {
-			builder.append(i.next());
+	
+	public void addDirector(Director director) {
+		directors.add(director);
+	}
+	
+	public String toString()
+	{
+		StringBuilder directorNames = new StringBuilder();
+		for(Director director : directors)
+		{
+			directorNames.append(director.toString());
 		}
-
-		return builder.append("]").toString();
+		return "[Department | name=" + name + ", directors=" + directorNames.toString() + "]";
 	}
 }
