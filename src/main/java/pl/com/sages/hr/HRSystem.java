@@ -10,6 +10,7 @@ import pl.com.sages.hr.model.Department;
 import pl.com.sages.hr.model.Director;
 import pl.com.sages.hr.model.Team;
 import pl.com.sages.hr.model.TeamType;
+import pl.com.sages.hr.operations.*;
 
 public class HRSystem {
 	
@@ -25,82 +26,51 @@ public class HRSystem {
 	{
 		System.out.println("--- Human Resources System ---");
 		Scanner scanner = new Scanner(System.in);
+
+		OperationFactory operationFactory = new OperationFactoryImpl(scanner, core);
 		while(true)
 		{
 			System.out.println("hrs# ");
 			String cmd = scanner.nextLine();
+
+			if(cmd.equals("exit"))
+			{
+				break;
+			}
+
+			if(!operationFactory.exists(cmd)) {
+				operationFactory.helpOperation().execute();
+			}
+
+			operationFactory.get(cmd).execute();
+
 			if(cmd.equals("info"))
 			{
-				System.out.println("Human Resources System v1");
+				Operation infoOperation = new InfoOperation();
+				infoOperation.execute();
 			}
 			else if(cmd.equals("add_department"))
 			{
-				DepartmentBuilder builder = new DepartmentBuilder();
-				System.out.println("Department name: ");
-				String departmentName = scanner.nextLine();
-				builder.createDepartment(departmentName);
-				System.out.println("Name of directors (comma-separated): ");
-				String[] directorNames = parseNames(scanner.nextLine(), ",");
-				for(String directorName : directorNames)
-				{
-					builder.addDirector(directorName);
-					System.out.println("Team names for director " + directorName + " (comma-separated)");
-					String[] teamNames = parseNames(scanner.nextLine(), ",");
-					for(String teamName : teamNames)
-					{
-						System.out.println("Team " + teamName + " is of type (QA, DEV, UX or OPS): ");
-						TeamType teamType = TeamType.valueOf(scanner.nextLine());
-						System.out.println("Team " + teamName + " exists since year: ");
-						int sinceYear = Integer.valueOf(scanner.nextLine());
-						System.out.println("Team " + teamName + " number of members: ");
-						int memberCount = Integer.valueOf(scanner.nextLine());
-						System.out.println("Team " + teamName + " KPI: ");
-						String kpiString = scanner.nextLine();
-						BigDecimal kpi = new BigDecimal(kpiString);
-						System.out.println("Team " + teamName + " director coefficient: ");
-						BigDecimal directorCoefficient = new BigDecimal(scanner.nextLine());
-						builder.addTeam(directorName, teamName, teamType, sinceYear, memberCount, kpi, directorCoefficient);
-					}
-				}
-				
-				Department department = builder.getDepartment();
-				core.addDepartment(department);
+				Operation addDeptOperation = new AddDepartmentOperation(scanner, core);
+				addDeptOperation.execute();
+
+
 			}
 			else if(cmd.equals("bonus"))
 			{
-				Set<Department> departments = core.getDepartments();
-				for(Department department : departments)
-				{
-					Set<Director> directors = department.getDirectors();
-					for(Director director : directors)
-					{
-						Set<Team> teams = director.getTeams();
-						for(Team team : teams)
-						{
-							BonusCalculator calculator = BonusCalculatorResolver.resolve(team);
-							BigDecimal bonus = calculator.calculateBonus(team);
-							System.out.println("Team " + team.getName() + " was assigned a bonus of: " + bonus);
-						}
-					}
-				}
+				Operation displayBonusesOperation = new DisplayBonusesOperation(core);
+				displayBonusesOperation.execute();
+
 			}
 			else if(cmd.equals("print"))
 			{
-				Set<Department> departments = core.getDepartments();
-				for(Department department : departments)
-				{
-					System.out.println(department.toString());
-				}
+				Operation printOrganization = new PrintOrganizationOperation(core);
+				printOrganization.execute();
 			}
 			else if(cmd.equals("exit"))
 			{
 				break;
 			}
 		}
-	}
-	
-	private static String[] parseNames(String line, String separator)
-	{
-		return line.split(separator);
 	}
 }
