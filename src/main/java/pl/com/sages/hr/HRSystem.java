@@ -26,12 +26,19 @@ public class HRSystem {
 				DepartmentBuilder builder = new DepartmentBuilder();
 				System.out.println("Department name: ");
 				String departmentName = scanner.nextLine();
+				// 1. create department
 				builder.createDepartment(departmentName);
 				System.out.println("Name of directors (comma-separated): ");
 				String[] directorNames = parseNames(scanner.nextLine(), ",");
+				// 2. create directors
 				for(String directorName : directorNames)
 				{
 					builder.addDirector(directorName);
+				}
+				
+				// 3. create teams
+				for(String directorName : directorNames)
+				{
 					System.out.println("Team names for director " + directorName + " (comma-separated)");
 					String[] teamNames = parseNames(scanner.nextLine(), ",");
 					for(String teamName : teamNames)
