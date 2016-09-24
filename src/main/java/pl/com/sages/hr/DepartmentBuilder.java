@@ -3,6 +3,7 @@ package pl.com.sages.hr;
 import pl.com.sages.hr.model.Department;
 import pl.com.sages.hr.model.Director;
 import pl.com.sages.hr.model.Team;
+import pl.com.sages.hr.model.TeamType;
 import pl.com.sages.hr.state.AddDepartmentState;
 import pl.com.sages.hr.state.AddDirectorState;
 import pl.com.sages.hr.state.AddTeamState;
@@ -32,15 +33,16 @@ public class DepartmentBuilder {
 		state = new AddDirectorState();
 	}
 	
-	public void addTeam(String directorName, String teamName)
+	public Team addTeam(String directorName, String teamName)
 	{
 		if(state instanceof AddTeamState)
 		{
 			state = new AddDirectorState();
 		}
 		
-		state.addTeam(directorName, teamName, department);
+		Team team = state.addTeam(directorName, teamName, department);
 		state = new AddTeamState();
+		return team;
 	}
 	
 	public Department getDepartment()
@@ -48,5 +50,15 @@ public class DepartmentBuilder {
 		department = state.getDepartment(department);
 		state = new EndState();
 		return department;
+	}
+
+	public Team addTeam(String directorName, String teamName, TeamType type, int yearFounded, int headCount, double kpi, double coefficient) {
+		Team team = this.addTeam(directorName, teamName);
+		team.setType(type);
+		team.setYearFounded(yearFounded);
+		team.setHeadCount(headCount);
+		team.setKPI(kpi);
+		team.setDirectorCoefficient(coefficient);
+		return team;
 	}
 }

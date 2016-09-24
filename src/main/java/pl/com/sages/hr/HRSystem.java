@@ -3,7 +3,7 @@ package pl.com.sages.hr;
 import java.util.Scanner;
 import java.util.Set;
 
-import pl.com.sages.hr.model.Department;
+import pl.com.sages.hr.model.*;
 
 public class HRSystem {
 	
@@ -21,6 +21,15 @@ public class HRSystem {
 			{
 				System.out.println("Human Resources System v1");
 			}
+			else if(cmd.equals("bonus"))
+			{
+				Set<Team> teams = core.getAllTeams();
+				PremiumCalculator calculator = new RegularPremiumCalculator(new RegularTeamFactorCalculator());
+				for(Team team : teams) {
+					double calculatedPremium = calculator.calculatePremiumForTeam(team);
+					System.out.println("Team " + team.getName() + " was assigned a premium: " + calculatedPremium);
+				}
+			}
 			else if(cmd.equals("add_department"))
 			{
 				DepartmentBuilder builder = new DepartmentBuilder();
@@ -35,7 +44,7 @@ public class HRSystem {
 				{
 					builder.addDirector(directorName);
 				}
-				
+
 				// 3. create teams
 				for(String directorName : directorNames)
 				{
@@ -43,10 +52,31 @@ public class HRSystem {
 					String[] teamNames = parseNames(scanner.nextLine(), ",");
 					for(String teamName : teamNames)
 					{
-						builder.addTeam(directorName, teamName);
+						System.out.println("Team " + teamName + " is of type: ");
+						String teamType = scanner.nextLine();
+						TeamType type = TeamType.valueOf(teamType);
+
+						System.out.println("Team " + teamName + " exist since year: ");
+						String teamYear = scanner.nextLine();
+						int yearFounded = Integer.valueOf(teamYear);
+
+						System.out.println("Team " + teamName + " number of members: ");
+						String teamMembersCount = scanner.nextLine();
+						int headCount = Integer.valueOf(teamMembersCount);
+
+						System.out.println("Team " + teamName + " KPI: ");
+						String teamKPI = scanner.nextLine();
+						double kpi = Double.valueOf(teamKPI);
+
+						System.out.println("Team " + teamName + " director coefficient: ");
+						String teamCoefficient = scanner.nextLine();
+						double coefficient = Double.valueOf(teamCoefficient);
+
+
+						builder.addTeam(directorName, teamName, type, yearFounded, headCount, kpi, coefficient);
 					}
 				}
-				
+
 				Department department = builder.getDepartment();
 				core.addDepartment(department);
 			}

@@ -17,15 +17,16 @@ public class AddDirectorState implements DepartmentState {
 	}
 
 	@Override
-	public void addTeam(String directorName, String teamName,
-			Department department) {
+	public Team addTeam(String directorName, String teamName,
+						Department department) {
+		Team team = new Team();
 		for (Director director : department.getDirectors()) {
 			if (directorName.equals(director.getName())) {
-				Team team = new Team();
 				team.setName(teamName);
 				director.addTeam(team);
 			}
 		}
+		return team;
 	}
 
 	@Override
