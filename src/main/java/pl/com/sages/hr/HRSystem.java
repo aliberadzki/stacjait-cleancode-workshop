@@ -11,6 +11,18 @@ public class HRSystem {
 	
 	public static void main(String[] args)
 	{
+		Department dummyDepartment = DepartmentBuilder.create("IT")
+				.newDirector("Smith")
+				.newTeam("Mercury")
+				.newTeam("Pluton")
+				.newDirector("Brown")
+				.newTeam("Uranium")
+				.newTeam("Mars")
+				.newTeam("Earth")
+				.department();
+
+		core.addDepartment(dummyDepartment);
+
 		System.out.println("--- Human Resources System ---");
 		Scanner scanner = new Scanner(System.in);
 		while(true)

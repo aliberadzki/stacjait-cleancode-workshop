@@ -1,20 +1,19 @@
 package pl.com.sages.hr;
 
 import pl.com.sages.hr.model.Department;
-import pl.com.sages.hr.model.Director;
-import pl.com.sages.hr.model.Team;
 import pl.com.sages.hr.state.AddDepartmentState;
 import pl.com.sages.hr.state.AddDirectorState;
 import pl.com.sages.hr.state.AddTeamState;
 import pl.com.sages.hr.state.DepartmentState;
 import pl.com.sages.hr.state.EndState;
 import pl.com.sages.hr.state.InitState;
+import pl.com.sages.hr.state.fluentstate.InitFluentState;
 
 public class DepartmentBuilder {
 	
 	private Department department = new Department();
 	private DepartmentState state = new InitState();
-	
+
 	public void createDepartment(String name)
 	{
 		state.createDepartment(name, department);
@@ -48,5 +47,9 @@ public class DepartmentBuilder {
 		department = state.getDepartment(department);
 		state = new EndState();
 		return department;
+	}
+
+	public static InitFluentState create(String deptName) {
+		return new InitFluentState(deptName);
 	}
 }
