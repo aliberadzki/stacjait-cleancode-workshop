@@ -1,10 +1,13 @@
 package pl.com.sages.hr.model;
 
+import pl.com.sages.hr.model.stats.Visitable;
+import pl.com.sages.hr.model.stats.Visitor;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Director {
+public class Director implements Visitable {
 	private String name;
 	private Set<Team> teams = new HashSet<Team>();
 
@@ -38,5 +41,12 @@ public class Director {
 
 	public Set<Team> getTeams() {
 		return teams;
+	}
+
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
+		for(Team team : teams) {
+			team.accept(visitor);
+		}
 	}
 }

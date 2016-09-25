@@ -1,8 +1,11 @@
 package pl.com.sages.hr.model;
 
+import pl.com.sages.hr.model.stats.Visitable;
+import pl.com.sages.hr.model.stats.Visitor;
+
 import java.util.Iterator;
 
-public class Team {
+public class Team implements Visitable {
 	private String name;
     private TeamType type;
     private int yearFounded;
@@ -68,5 +71,9 @@ public class Team {
                 .append("]")
                 .toString();
 
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

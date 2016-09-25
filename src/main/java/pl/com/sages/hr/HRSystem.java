@@ -20,6 +20,7 @@ public class HRSystem {
 		operations.registerOperation(new PrintOrganizationOperation(organization));
 		operations.registerOperation(new HelpOperation(operations));
 		operations.registerOperation(new CalculateBonusOperation(organization));
+		operations.registerOperation(new PrintStatsOperation(organization));
 
 		System.out.println("--- Human Resources System ---");
 		while(true)
