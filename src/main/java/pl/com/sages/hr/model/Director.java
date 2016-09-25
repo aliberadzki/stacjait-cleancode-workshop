@@ -31,4 +31,12 @@ public class Director {
 		return builder.append("]").toString();
 
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Set<Team> getTeams() {
+		return teams;
+	}
 }

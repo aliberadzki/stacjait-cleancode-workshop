@@ -29,4 +29,12 @@ public class Department {
 
 		return builder.append("]").toString();
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Set<Director> getDirectors() {
+		return directors;
+	}
 }
