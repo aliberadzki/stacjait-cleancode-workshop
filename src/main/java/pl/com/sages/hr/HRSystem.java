@@ -1,5 +1,6 @@
 package pl.com.sages.hr;
 
+import pl.com.sages.hr.logging.LoggingDecorator;
 import pl.com.sages.hr.operations.*;
 import pl.com.sages.hr.builder.OrganizationBuilder;
 import pl.com.sages.hr.builder.OrganizationBuilderImpl;
@@ -15,12 +16,12 @@ public class HRSystem {
 		OrganizationBuilder organization = new OrganizationBuilderImpl();
 		Scanner scanner = new Scanner(System.in);
 
-		operations.registerOperation(new InfoOperation());
-		operations.registerOperation(new AddDepartmentOperation(scanner, organization));
-		operations.registerOperation(new PrintOrganizationOperation(organization));
-		operations.registerOperation(new HelpOperation(operations));
-		operations.registerOperation(new CalculateBonusOperation(organization));
-		operations.registerOperation(new PrintStatsOperation(organization));
+		operations.registerOperation(new LoggingDecorator(new InfoOperation()));
+		operations.registerOperation(new LoggingDecorator(new AddDepartmentOperation(scanner, organization)));
+		operations.registerOperation(new LoggingDecorator(new PrintOrganizationOperation(organization)));
+		operations.registerOperation(new LoggingDecorator(new HelpOperation(operations)));
+		operations.registerOperation(new LoggingDecorator(new CalculateBonusOperation(organization)));
+		operations.registerOperation(new LoggingDecorator(new PrintStatsOperation(organization)));
 
 		System.out.println("--- Human Resources System ---");
 		while(true)
